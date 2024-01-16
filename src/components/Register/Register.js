@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Register.scss";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -10,42 +11,71 @@ function Register() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const defaultValidInput = {
+    isValidEmail: true,
+    isValidPhone: true,
+    isValidPassword: true,
+    isValidConfirmPassword: true,
+  };
+  const [objCheckInput, setObjCheckInput] = useState(defaultValidInput);
+
   const history = useHistory();
   const handleBackToLogin = () => {
     history.push("/login");
   };
 
   const handleRegister = () => {
-    isValidInputs();
+    let check = isValidInputs();
     let userData = { email, phone, username, password };
     console.log(">> check userData", userData);
+
+    if (check) {
+      axios.post("http://localhost:8080/api/v1/register", {
+        email,
+        phone,
+        username,
+        password,
+      });
+    }
   };
 
   const isValidInputs = () => {
+    setObjCheckInput(defaultValidInput);
     let re = /\S+@\S+\.\S+/;
     if (!email) {
       toast.error("Email is required !");
+      setObjCheckInput({ ...defaultValidInput, isValidEmail: false });
       return false;
     }
     if (!re.test(email)) {
       toast.error("Please enter a valid email address !");
+      setObjCheckInput({ ...defaultValidInput, isValidEmail: false });
       return false;
     }
     if (!phone) {
       toast.error("Phonenumber is required !");
+      setObjCheckInput({ ...defaultValidInput, isValidPhone: false });
       return false;
     }
     if (!password) {
       toast.error("Password is required !");
+      setObjCheckInput({ ...defaultValidInput, isValidPassword: false });
       return false;
     }
     if (password !== confirmPassword) {
       toast.error("Your password is not the same !");
+      setObjCheckInput({ ...defaultValidInput, isValidConfirmPassword: false });
       return false;
     }
 
     return true;
   };
+
+  // useEffect(() => {
+  //   axios.get("http://localhost:8080/api/v1/test-api").then((data) => {
+  //     console.log(">>> check data axios: ", data);
+  //   });
+  // }, []);
 
   return (
     <div className="register-container">
@@ -65,7 +95,9 @@ function Register() {
               <label>Email:</label>
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${
+                  objCheckInput.isValidEmail ? "" : "is-invalid"
+                }`}
                 placeholder="Email address"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
@@ -76,7 +108,7 @@ function Register() {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Phone number"
+                placeholder="Username"
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
               />
@@ -85,7 +117,9 @@ function Register() {
               <label>Phone:</label>
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${
+                  objCheckInput.isValidPhone ? "" : "is-invalid"
+                }`}
                 placeholder="Phone number"
                 value={phone}
                 onChange={(event) => setPhone(event.target.value)}
@@ -95,7 +129,9 @@ function Register() {
               <label>Password:</label>
               <input
                 type="password"
-                className="form-control"
+                className={`form-control ${
+                  objCheckInput.isValidPassword ? "" : "is-invalid"
+                }`}
                 placeholder="Password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
@@ -106,7 +142,9 @@ function Register() {
               <label>Repeat password:</label>
               <input
                 type="password"
-                className="form-control"
+                className={`form-control ${
+                  objCheckInput.isValidConfirmPassword ? "" : "is-invalid"
+                }`}
                 placeholder="Repeat Password"
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
