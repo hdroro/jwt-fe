@@ -1,6 +1,20 @@
+import { useState } from "react";
 import "./Login.scss";
+import { useHistory } from "react-router-dom";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const history = useHistory();
+  const handleCreateNewAccount = () => {
+    history.push("/register");
+  };
+
+  const handleLogin = () => {
+    let userData = { email, password };
+    console.log(">>check userData", userData);
+  };
+
   return (
     <div className="login-container">
       <div className="container">
@@ -19,13 +33,19 @@ function Login() {
               type="text"
               className="form-control"
               placeholder="Email address or your phone number"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
             />
             <input
               type="password"
               className="form-control"
               placeholder="Password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
             />
-            <button className="btn btn-primary">Login</button>
+            <button className="btn btn-primary" onClick={() => handleLogin()}>
+              Login
+            </button>
             <span className="text-center">
               <a className="forgotten-password" href="#">
                 Forgotten password?
@@ -33,7 +53,12 @@ function Login() {
             </span>
             <hr />
             <div className="text-center">
-              <button className="btn btn-success">Create new account</button>
+              <button
+                className="btn btn-success"
+                onClick={() => handleCreateNewAccount()}
+              >
+                Create new account
+              </button>
             </div>
           </div>
         </div>
