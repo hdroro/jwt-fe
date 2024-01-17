@@ -2,10 +2,10 @@ import { useState } from "react";
 import "./Login.scss";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { handleUserLogin } from "../../services/userService";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [valueLogin, setValueLogin] = useState("");
   const [password, setPassword] = useState("");
   const defaultValidInput = {
     isValidEmail: true,
@@ -18,31 +18,36 @@ function Login() {
     history.push("/register");
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     let check = isValidInputs();
-    let userData = { email, password };
+    let userData = { valueLogin, password };
     console.log(">>check userData", userData);
     if (check) {
-      axios.post("http://localhost:8080/api/v1/login", {
-        email,
-        password,
-      });
+      let response = await handleUserLogin(valueLogin, password);
+      if (response && response.data && +response.data.EC === 0) {
+        //success
+        let data = {
+          isAuthenticated: true,
+          token: "fake token",
+        };
+        sessionStorage.setItem("account", JSON.stringify(data));
+        history.push("/users");
+        toast.success("Login successfully!");
+      } else if (response && response.data && +response.data.EC !== 0) {
+        toast.error(response.data.EM);
+      }
     }
   };
 
   const isValidInputs = () => {
     setObjCheckInput(defaultValidInput);
-    let re = /\S+@\S+\.\S+/;
-    if (!email) {
-      toast.error("Email is required !");
+    // let re = /\S+@\S+\.\S+/;
+    if (!valueLogin) {
+      toast.error("Please enter your email address or phone number !");
       setObjCheckInput({ ...defaultValidInput, isValidEmail: false });
       return false;
     }
-    if (!re.test(email)) {
-      toast.error("Please enter a valid email address !");
-      setObjCheckInput({ ...defaultValidInput, isValidEmail: false });
-      return false;
-    }
+
     if (!password) {
       toast.error("Password is required !");
       setObjCheckInput({ ...defaultValidInput, isValidPassword: false });
@@ -72,8 +77,8 @@ function Login() {
                 objCheckInput.isValidEmail ? "" : "is-invalid"
               }`}
               placeholder="Email address or your phone number"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              value={valueLogin}
+              onChange={(event) => setValueLogin(event.target.value)}
             />
             <input
               type="password"
