@@ -1,12 +1,10 @@
 import Nav from "./components/Navigation/Nav";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.scss";
-import Login from "./components/Login/Login";
-import Register from "./components/Register/Register";
+
 import { ToastContainer } from "react-toastify";
-import Users from "./components/ManageUsers/Users";
 import { useEffect, useState } from "react";
-import _ from "lodash";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   const [account, setAccount] = useState({});
@@ -20,26 +18,11 @@ function App() {
   return (
     <>
       <Router>
+        <div className="app-header">
+          <Nav />
+        </div>
         <div className="app-container">
-          {account && !_.isEmpty(account) && account.isAuthenticated && <Nav />}
-          <Switch>
-            <Route path="/about">About</Route>
-            <Route path="/news">News</Route>
-            <Route path="/contact">Contact</Route>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/register">
-              <Register />
-            </Route>
-            <Route path="/users">
-              <Users />
-            </Route>
-            <Route path="/" exact>
-              Home
-            </Route>
-            <Route path="*">404 NOT FOUND</Route>
-          </Switch>
+          <AppRoutes />
         </div>
       </Router>
       <ToastContainer
