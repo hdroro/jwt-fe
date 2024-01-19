@@ -25,4 +25,10 @@ const fetchAllUsers = (page, limit) => {
   });
 };
 
-export { registerNewUser, handleUserLogin, fetchAllUsers };
+const handleDeleteUser = (id) => {
+  return axios.delete("http://localhost:8080/api/v1/user/delete", {
+    data: { id: id },
+  });
+};
+
+export { registerNewUser, handleUserLogin, fetchAllUsers, handleDeleteUser };
