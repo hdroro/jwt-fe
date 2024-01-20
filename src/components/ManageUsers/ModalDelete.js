@@ -3,7 +3,7 @@ import Modal from "react-bootstrap/Modal";
 
 function ModalDelete(props) {
   return (
-    <Modal show={props.show} onHide={props.handleClose}>
+    <Modal show={props.show} onHide={props.handleClose} centered>
       <Modal.Dialog style={{ margin: 0 }}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm delete user</Modal.Title>
