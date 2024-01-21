@@ -25,10 +25,10 @@ function Users() {
 
   const fetchUsers = async () => {
     let response = await fetchAllUsers(currentPage, currentLimit);
-    if (response && response.data && response.data.EC === 0) {
-      setListUsers(response.data.DT.users);
-      setTotalPages(response.data.DT.totalPages);
-      console.log(response.data.DT);
+    if (response && response.EC === 0) {
+      setListUsers(response.DT.users);
+      setTotalPages(response.DT.totalPages);
+      console.log(response.DT);
     }
   };
 
@@ -51,12 +51,12 @@ function Users() {
 
   const handleConfirmDelete = async () => {
     let response = await handleDeleteUser(dataModal.id);
-    if (response && response.data && response.data.EC === 0) {
-      toast.success(response.data.EM);
+    if (response && response.EC === 0) {
+      toast.success(response.EM);
       await fetchUsers();
       setShowModalDelete(false);
     } else {
-      toast.error(response.data.EM);
+      toast.error(response.EM);
     }
   };
 
@@ -140,7 +140,7 @@ function Users() {
                 breakLabel="..."
                 nextLabel="next >"
                 onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
+                pageRangeDisplayed={4}
                 marginPagesDisplayed={3}
                 pageCount={totalPages}
                 previousLabel="< previous"

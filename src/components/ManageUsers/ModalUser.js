@@ -51,8 +51,8 @@ function ModalUser(props) {
   }, [action, dataModelUser]);
   const fetchGroups = async () => {
     let response = await fetchAllGroups();
-    if (response && response.data && response.data.EC === 0) {
-      setListGroups(response.data.DT);
+    if (response && response.EC === 0) {
+      setListGroups(response.DT);
     }
   };
 
@@ -112,7 +112,7 @@ function ModalUser(props) {
           group
         );
       }
-      let serverData = response.data;
+      let serverData = response;
       if (+serverData.EC === 0) {
         toast.success(serverData.EM);
         props.handleCloseModalUser();
