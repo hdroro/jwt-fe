@@ -14,10 +14,14 @@ function Users() {
   const [dataModal, setDataModal] = useState({});
 
   const [isShowModalDelete, setShowModalDelete] = useState(false);
+  const [isShowModalUser, setShowModalUser] = useState(false);
+
+  const [actionModalUser, setActionModalUser] = useState("CREATE");
+  const [dataModelUser, setDataModalUser] = useState({});
 
   useEffect(() => {
     fetchUsers();
-  }, [currentPage]);
+  }, [currentPage, isShowModalUser]);
 
   const fetchUsers = async () => {
     let response = await fetchAllUsers(currentPage, currentLimit);
@@ -41,6 +45,10 @@ function Users() {
     setDataModal({});
   };
 
+  const handleCloseModalUser = () => {
+    setShowModalUser(false);
+  };
+
   const handleConfirmDelete = async () => {
     let response = await handleDeleteUser(dataModal.id);
     if (response && response.data && response.data.EC === 0) {
@@ -50,6 +58,16 @@ function Users() {
     } else {
       toast.error(response.data.EM);
     }
+  };
+
+  const handleCreateNewUser = () => {
+    setShowModalUser(true);
+    // setDataModalUser({});
+  };
+  const handleUpdateUser = (user) => {
+    setShowModalUser(true);
+    setActionModalUser("UPDATE");
+    setDataModalUser(user);
   };
   return (
     <>
@@ -61,7 +79,15 @@ function Users() {
             </div>
             <div className="actions">
               <button className="btn btn-success">Refresh</button>
-              <button className="btn btn-primary">Add new user</button>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  handleCreateNewUser();
+                  setActionModalUser("CREATE");
+                }}
+              >
+                Add new user
+              </button>
             </div>
           </div>
 
@@ -82,13 +108,20 @@ function Users() {
                   listUsers.length &&
                   listUsers.map((item, index) => (
                     <tr key={index}>
-                      <th scope="row">{index + 1}</th>
+                      <th scope="row">
+                        {(currentPage - 1) * currentLimit + index + 1}
+                      </th>
                       <td>{item.id}</td>
                       <td>{item.email}</td>
                       <td>{item.username}</td>
                       <td>{item.Group?.name}</td>
                       <td style={{ display: "flex", gap: "5px" }}>
-                        <button className="btn btn-warning">Edit</button>
+                        <button
+                          className="btn btn-warning"
+                          onClick={() => handleUpdateUser(item)}
+                        >
+                          Edit
+                        </button>
                         <button
                           className="btn btn-danger"
                           onClick={() => handleDeleteAUser(item)}
@@ -108,6 +141,7 @@ function Users() {
                 nextLabel="next >"
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={5}
+                marginPagesDisplayed={3}
                 pageCount={totalPages}
                 previousLabel="< previous"
                 pageClassName="page-item"
@@ -133,7 +167,12 @@ function Users() {
         handleConfirmDelete={handleConfirmDelete}
       />
 
-      <ModalUser title={"Create new user"} />
+      <ModalUser
+        isShowModalUser={isShowModalUser}
+        handleCloseModalUser={handleCloseModalUser}
+        action={actionModalUser}
+        dataModelUser={dataModelUser}
+      />
     </>
   );
 }

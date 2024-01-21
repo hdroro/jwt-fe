@@ -31,4 +31,41 @@ const handleDeleteUser = (id) => {
   });
 };
 
-export { registerNewUser, handleUserLogin, fetchAllUsers, handleDeleteUser };
+const handleCreateUser = (
+  email,
+  phone,
+  username,
+  password,
+  address,
+  gender,
+  group
+) => {
+  return axios.post("http://localhost:8080/api/v1/user/create", {
+    email,
+    phone,
+    username,
+    password,
+    address,
+    gender,
+    group,
+  });
+};
+
+const handleUpdateUser = (id, username, address, gender, group) => {
+  return axios.put("http://localhost:8080/api/v1/user/update", {
+    id,
+    username,
+    address,
+    gender,
+    group,
+  });
+};
+
+export {
+  registerNewUser,
+  handleUserLogin,
+  fetchAllUsers,
+  handleDeleteUser,
+  handleCreateUser,
+  handleUpdateUser,
+};
