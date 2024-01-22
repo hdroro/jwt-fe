@@ -64,7 +64,9 @@ const handleUpdateUser = (id, username, address, gender, group) => {
 const getUserAccount = () => {
   return axios.get("/api/v1/account");
 };
-
+const logoutUser = () => {
+  return axios.post("/api/v1/logout");
+};
 export {
   registerNewUser,
   handleUserLogin,
@@ -73,4 +75,5 @@ export {
   handleCreateUser,
   handleUpdateUser,
   getUserAccount,
+  logoutUser,
 };
