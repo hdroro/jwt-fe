@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./Login.scss";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { handleUserLogin } from "../../services/userService";
+import { UserContext } from "../../context/UserContext";
 
 function Login() {
+  const { loginContext } = useContext(UserContext);
   const [valueLogin, setValueLogin] = useState("");
   const [password, setPassword] = useState("");
   const defaultValidInput = {
@@ -21,18 +23,30 @@ function Login() {
   const handleLogin = async () => {
     let check = isValidInputs();
     let userData = { valueLogin, password };
-    console.log(">>check userData", userData);
+
     if (check) {
       let response = await handleUserLogin(valueLogin, password);
       if (response && +response.EC === 0) {
+        let groupWithRoles = response.DT.groupWithRoles;
+        let email = response.DT.email;
+        let username = response.DT.username;
+        let token = response.DT.access_token;
         //success
         let data = {
           isAuthenticated: true,
-          token: "fake token",
+          token,
+          account: {
+            groupWithRoles,
+            email,
+            username,
+          },
         };
+
         sessionStorage.setItem("account", JSON.stringify(data));
+        loginContext(data);
+
         history.push("/users");
-        window.location.reload();
+        // window.location.reload();
 
         toast.success("Login successfully!");
       } else if (response && +response.EC !== 0) {

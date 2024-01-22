@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
 import "./Users.scss";
 import { fetchAllUsers, handleDeleteUser } from "../../services/userService";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
 import ModalDelete from "./ModalDelete";
 import ModalUser from "./ModalUser";
+import { useEffect, useState } from "react";
 
 function Users() {
   const [listUsers, setListUsers] = useState([]);
