@@ -1,4 +1,4 @@
-import Nav from "./components/Navigation/Nav";
+import NavHeader from "./components/Navigation/NavHeader";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./App.scss";
 import { UserContext } from "./context/UserContext";
@@ -22,7 +22,7 @@ function App() {
         ) : (
           <>
             <div className="app-header">
-              <Nav />
+              <NavHeader />
             </div>
             <div className="app-container">
               <AppRoutes />
