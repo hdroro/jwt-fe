@@ -61,6 +61,10 @@ const handleUpdateUser = (id, username, address, gender, group) => {
   });
 };
 
+const getUserAccount = () => {
+  return axios.get("/api/v1/account");
+};
+
 export {
   registerNewUser,
   handleUserLogin,
@@ -68,4 +72,5 @@ export {
   handleDeleteUser,
   handleCreateUser,
   handleUpdateUser,
+  getUserAccount,
 };

@@ -42,7 +42,6 @@ function Login() {
           },
         };
 
-        sessionStorage.setItem("account", JSON.stringify(data));
         loginContext(data);
 
         history.push("/users");
@@ -78,14 +77,6 @@ function Login() {
       handleLogin();
     }
   };
-
-  useEffect(() => {
-    let session = sessionStorage.getItem("account");
-    if (session) {
-      history.push("/users");
-      window.location.reload();
-    }
-  }, []);
 
   return (
     <div className="login-container">

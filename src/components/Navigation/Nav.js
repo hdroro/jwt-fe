@@ -1,29 +1,25 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import "./Nav.scss";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 
 function Nav() {
-  const [isShow, setIsShow] = useState(false);
-  let location = useLocation();
-  useEffect(() => {
-    // let session = sessionStorage.getItem("account");
-    // if (session) {
-    //   setIsShow(true);
-    // }
-    if (location.pathname === "/login" || location.pathname === "/register") {
-      setIsShow(false);
-    } else setIsShow(true);
-  }, []);
-
+  const { user } = useContext(UserContext);
+  const location = useLocation();
   return (
     <>
-      {isShow && (
+      {(user && user.isAuthenticated) || location.pathname === "/" ? (
         <div className="topnav">
-          <NavLink to="/home">Home</NavLink>
+          <NavLink to="/" exact>
+            Home
+          </NavLink>
           <NavLink to="/users">Users</NavLink>
           <NavLink to="/projects">Project</NavLink>
           <NavLink to="/about">About</NavLink>
         </div>
+      ) : (
+        <></>
       )}
     </>
   );
