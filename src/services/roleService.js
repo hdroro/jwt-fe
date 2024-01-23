@@ -20,4 +20,20 @@ const deleteRole = (id) => {
 const updateRole = (id, url, description) => {
   return axios.put("/api/v1/role/update", { id, url, description });
 };
-export { fetchAllRoles, createNewRole, deleteRole, updateRole };
+
+const fetchAllRolesByGroup = (groupId) => {
+  return axios.get(`/api/v1/role/by-group/${groupId}`);
+};
+
+const assignRolesToGroup = (data) => {
+  return axios.post(`/api/v1/role/assign-to-group`, { ...data });
+};
+
+export {
+  fetchAllRoles,
+  createNewRole,
+  deleteRole,
+  updateRole,
+  fetchAllRolesByGroup,
+  assignRolesToGroup,
+};
