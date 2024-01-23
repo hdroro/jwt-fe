@@ -1,0 +1,22 @@
+.role-container {
+  .actions {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    .add-new-role {
+      color: white;
+      background: green;
+      border-radius: 50%;
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+    }
+
+    .delete-role {
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      color: #e32437;
+    }
+  }
+}
